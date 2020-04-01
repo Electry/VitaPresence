@@ -7,12 +7,60 @@
 #include "main.h"
 
 int module_get_offset(SceUID pid, SceUID modid, int segidx, size_t offset, uintptr_t *addr);
+bool ksceSblACMgrIsPspEmu(SceUID pid);
 
 static SceUID g_thread_uid = -1;
 static bool g_thread_run = true;
 
 static uint32_t *SceAppMgr_mutex_uid;
 static uint32_t *SceAppMgr_app_list;
+
+static char g_sfo_cache_titleid[10] = "";
+static char g_sfo_cache_title[128] = "";
+
+static int extract_sfo_title(char *out_title, const char *bubbleid) {
+    char sfo_path[128];
+    snprintf(sfo_path, 128, "ux0:app/%s/sce_sys/param.sfo", bubbleid);
+    snprintf(out_title, 128, "%s", bubbleid);
+
+    int ret = 0;
+    int fd = ksceIoOpen(sfo_path, SCE_O_RDONLY, 0777);
+    if (fd < 0)
+        return 0;
+
+    char key[6];
+
+    sfo_header_t hdr;
+    ret = ksceIoRead(fd, &hdr, sizeof(sfo_header_t));
+    if (ret != sizeof(sfo_header_t) || hdr.magic != 0x46535000) {
+        goto ERR_CLOSE;
+    }
+
+    sfo_entry_t entry;
+    for (uint32_t i = 0; i < hdr.indexTableEntries; i++) {
+        ret = ksceIoPread(fd, &entry, sizeof(sfo_entry_t), sizeof(sfo_header_t) + sizeof(sfo_entry_t) * i);
+        if (ret != sizeof(sfo_entry_t))
+            goto ERR_CLOSE;
+
+        ret = ksceIoPread(fd, key, 5, hdr.keyTableOffset + entry.keyOffset);
+        if (ret != 5)
+            goto ERR_CLOSE;
+
+        if (strncmp(key, "TITLE", 5))
+            continue;
+
+        ret = ksceIoPread(fd, out_title, 128, hdr.dataTableOffset + entry.dataOffset);
+        if (ret != 128)
+            goto ERR_CLOSE;
+
+        ksceIoClose(fd);
+        return 1;
+    }
+
+ERR_CLOSE:
+    ksceIoClose(fd);
+    return 0;
+}
 
 // If there's a better way of obtaining foreground app info, please do let me know
 static int get_fg_app(char *out_titleid, char *out_title) {
@@ -35,15 +83,54 @@ static int get_fg_app(char *out_titleid, char *out_title) {
         if (state != APP_RUNNING)
             continue;
 
-        if (!ksceSblACMgrIsGameProgram(pid))
+        bool is_game = ksceSblACMgrIsGameProgram(pid);
+        bool is_pspemu = ksceSblACMgrIsPspEmu(pid);
+        if (!is_game && !is_pspemu)
             continue;
 
         const char *titleid = (const char *)(APP_LIST_GET_TITLEID(pcurrent));
-        if (strncmp(titleid, "PCS", 3))
-            continue; // filter out homebrew
+        const char *bubbleid = (const char *)(APP_LIST_GET_BUBBLEID(pcurrent));
 
-        snprintf(out_titleid, 10, "%s", titleid);
-        snprintf(out_title, 128, "%s", (const char *)(APP_LIST_GET_TITLE(pcurrent)));
+        // Filter out homebrew
+        if (is_game && !is_pspemu && strncmp(titleid, "PCS", 3))
+            continue;
+
+        // PspEmu launched through Adrenaline
+        if (is_pspemu && !strncmp(bubbleid, "PSPEMUCFW", 9)) {
+            SceAdrenaline adrenaline;
+            ksceKernelMemcpyUserToKernelForPid(pid, &adrenaline, (uintptr_t)0x73CDE000, sizeof(SceAdrenaline));
+
+            if (adrenaline.titleid[0] == '\0' || !strncmp(adrenaline.titleid, "XMB", 3)) {
+                snprintf(out_titleid, 10, "XMB");
+                snprintf(out_title, 128, "Adrenaline XMB Menu");
+            } else {
+                memcpy(out_titleid, adrenaline.titleid, 9); out_titleid[9] = '\0';
+                memcpy(out_title, adrenaline.title, 128); out_title[127] = '\0';
+            }
+        }
+        // PspEmu launched through custom bubble
+        else if (is_pspemu) {
+            // Check if title is cached
+            if (!strncmp(g_sfo_cache_titleid, bubbleid, 9)) {
+                snprintf(out_titleid, 10, "%s", g_sfo_cache_titleid);
+                snprintf(out_title, 128, "%s", g_sfo_cache_title);
+            }
+            // If not, extract title from SFO
+            else {
+                extract_sfo_title(out_title, bubbleid);
+                snprintf(out_titleid, 10, "%s", bubbleid);
+
+                // Update cache
+                memcpy(g_sfo_cache_titleid, out_titleid, 10);
+                memcpy(g_sfo_cache_title, out_title, 128);
+            }
+        }
+        // PSVita game
+        else if (is_game) {
+            snprintf(out_titleid, 10, "%s", bubbleid);
+            snprintf(out_title, 128, "%s", (const char *)(APP_LIST_GET_TITLE(pcurrent)));
+        }
+
         ksceKernelUnlockMutex(*SceAppMgr_mutex_uid, 1);
         return i + 1;
     }
