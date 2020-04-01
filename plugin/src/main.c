@@ -15,13 +15,13 @@ static bool g_thread_run = true;
 static uint32_t *SceAppMgr_mutex_uid;
 static uint32_t *SceAppMgr_app_list;
 
-static char g_sfo_cache_titleid[10] = "";
-static char g_sfo_cache_title[128] = "";
+static char g_sfo_cache_titleid[TITLEID_LEN] = "";
+static char g_sfo_cache_title[TITLE_LEN] = "";
 
 static int extract_sfo_title(char *out_title, const char *bubbleid) {
     char sfo_path[128];
     snprintf(sfo_path, 128, "ux0:app/%s/sce_sys/param.sfo", bubbleid);
-    snprintf(out_title, 128, "%s", bubbleid);
+    snprintf(out_title, TITLE_LEN, "%s", bubbleid);
 
     int ret = 0;
     int fd = ksceIoOpen(sfo_path, SCE_O_RDONLY, 0777);
@@ -49,8 +49,8 @@ static int extract_sfo_title(char *out_title, const char *bubbleid) {
         if (strncmp(key, "TITLE", 5))
             continue;
 
-        ret = ksceIoPread(fd, out_title, 128, hdr.dataTableOffset + entry.dataOffset);
-        if (ret != 128)
+        ret = ksceIoPread(fd, out_title, TITLE_LEN, hdr.dataTableOffset + entry.dataOffset);
+        if (ret != TITLE_LEN)
             goto ERR_CLOSE;
 
         ksceIoClose(fd);
@@ -68,7 +68,7 @@ static int get_fg_app(char *out_titleid, char *out_title) {
     out_title[0] = '\0';
 
     int ret = ksceKernelLockMutex(*SceAppMgr_mutex_uid, 1, 0);
-    if (ret)
+    if (ret < 0)
         return 0;
 
     uint32_t pcurrent;
@@ -93,34 +93,34 @@ static int get_fg_app(char *out_titleid, char *out_title) {
             ksceKernelMemcpyUserToKernelForPid(pid, &adrenaline, (uintptr_t)0x73CDE000, sizeof(SceAdrenaline));
 
             if (adrenaline.titleid[0] == '\0' || !strncmp(adrenaline.titleid, "XMB", 3)) {
-                snprintf(out_titleid, 10, "XMB");
-                snprintf(out_title, 128, "Adrenaline XMB Menu");
+                snprintf(out_titleid, TITLEID_LEN, "XMB");
+                snprintf(out_title, TITLE_LEN, "Adrenaline XMB Menu");
             } else {
-                memcpy(out_titleid, adrenaline.titleid, 9); out_titleid[9] = '\0';
-                memcpy(out_title, adrenaline.title, 128); out_title[127] = '\0';
+                memcpy(out_titleid, adrenaline.titleid, TITLEID_LEN); out_titleid[TITLEID_LEN - 1] = '\0';
+                memcpy(out_title, adrenaline.title, TITLE_LEN); out_title[TITLE_LEN - 1] = '\0';
             }
         }
         // PspEmu launched through custom bubble
         else if (is_pspemu) {
             // Check if title is cached
             if (!strncmp(g_sfo_cache_titleid, bubbleid, 9)) {
-                snprintf(out_titleid, 10, "%s", g_sfo_cache_titleid);
-                snprintf(out_title, 128, "%s", g_sfo_cache_title);
+                snprintf(out_titleid, TITLEID_LEN, "%s", g_sfo_cache_titleid);
+                snprintf(out_title, TITLE_LEN, "%s", g_sfo_cache_title);
             }
             // If not, extract title from SFO
             else {
                 extract_sfo_title(out_title, bubbleid);
-                snprintf(out_titleid, 10, "%s", bubbleid);
+                snprintf(out_titleid, TITLEID_LEN, "%s", bubbleid);
 
                 // Update cache
-                memcpy(g_sfo_cache_titleid, out_titleid, 10);
-                memcpy(g_sfo_cache_title, out_title, 128);
+                memcpy(g_sfo_cache_titleid, out_titleid, TITLEID_LEN);
+                memcpy(g_sfo_cache_title, out_title, TITLE_LEN);
             }
         }
         // PSVita game/app
         else {
-            snprintf(out_titleid, 10, "%s", titleid);
-            snprintf(out_title, 128, "%s", (const char *)(APP_LIST_GET_TITLE(pcurrent)));
+            snprintf(out_titleid, TITLEID_LEN, "%s", titleid);
+            snprintf(out_title, TITLE_LEN, "%s", (const char *)(APP_LIST_GET_TITLE(pcurrent)));
         }
 
         ksceKernelUnlockMutex(*SceAppMgr_mutex_uid, 1);
@@ -144,6 +144,8 @@ static int vitapresence_thread(SceSize args, void *argp) {
     unsigned int addrlen = sizeof(SceNetSockaddrIn);
     int ret = 0;
 
+    static vitapresence_data_t presence_data;
+
     while (g_thread_run) {
         server_sockfd = ksceNetSocket("vitapresence_socket", SCE_NET_AF_INET, SCE_NET_SOCK_STREAM, 0);
         if (server_sockfd < 0)
@@ -162,11 +164,10 @@ static int vitapresence_thread(SceSize args, void *argp) {
         } while (ret < 0);
 
         while (g_thread_run && ret >= 0) {
-            client_sockfd = ksceNetAccept(server_sockfd, (struct SceNetSockaddr*)&clientaddr, &addrlen);
+            client_sockfd = ksceNetAccept(server_sockfd, (SceNetSockaddr *)&clientaddr, &addrlen);
             if (client_sockfd < 0)
                 break;
 
-            vitapresence_data_t presence_data;
             presence_data.magic = 0xCAFECAFE;
             presence_data.index = get_fg_app(presence_data.titleid, presence_data.title);
 
@@ -186,14 +187,14 @@ int module_start(SceSize argc, const void *args) {
     tai_module_info_t tai_info;
     tai_info.size = sizeof(tai_module_info_t);
     if (taiGetModuleInfoForKernel(KERNEL_PID, "SceAppMgr", &tai_info) < 0)
-        return SCE_KERNEL_START_SUCCESS;
+        return SCE_KERNEL_START_NO_RESIDENT;
 
     module_get_offset(KERNEL_PID, tai_info.modid, 1, 0x4A4, (uintptr_t *)&SceAppMgr_mutex_uid);
     module_get_offset(KERNEL_PID, tai_info.modid, 1, 0x500, (uintptr_t *)&SceAppMgr_app_list);
 
     g_thread_uid = ksceKernelCreateThread("vitapresence_thread", vitapresence_thread, 0x3C, 0x1000, 0, 0x10000, 0);
     if (g_thread_uid < 0)
-        return SCE_KERNEL_START_SUCCESS;
+        return SCE_KERNEL_START_NO_RESIDENT;
 
     ksceKernelStartThread(g_thread_uid, 0, NULL);
     return SCE_KERNEL_START_SUCCESS;
