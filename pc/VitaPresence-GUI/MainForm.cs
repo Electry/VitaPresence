@@ -156,7 +156,7 @@ namespace VitaPresence_GUI
 
         private void SetUserInfoConnecting()
         {
-            UpdateStatus("Attemping to connect to server...", Color.Gray);
+            UpdateStatus("Attemping to connect to PS Vita...", Color.Gray);
             trayIcon.Icon = Resources.Disconnected;
             trayIcon.Text = "VitaPresence (Connecting...)";
         }
@@ -217,6 +217,7 @@ namespace VitaPresence_GUI
                     {
                         UpdateStatus("Could not connect to PS Vita! Retrying...", Color.DarkRed);
                         client.Close();
+                        if (rpc != null && !rpc.IsDisposed) rpc.ClearPresence();
                     }
                     else
                     {
