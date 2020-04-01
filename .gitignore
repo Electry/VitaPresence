@@ -1,0 +1,8 @@
+out
+
+pc/.vs
+pc/packages
+pc/*/bin
+pc/*/obj
+
+plugin/build
