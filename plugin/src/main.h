@@ -18,7 +18,7 @@ typedef struct {
     uint32_t magic;
     int index;
     char titleid[10];
-    char title[256];
+    char title[128];
 } vitapresence_data_t;
 
 #endif

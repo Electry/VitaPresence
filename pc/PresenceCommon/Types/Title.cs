@@ -10,7 +10,7 @@ namespace PresenceCommon.Types
         public string TitleID { get; }
         public string TitleName { get; }
 
-        [StructLayout(LayoutKind.Sequential, Size = 520)]
+        [StructLayout(LayoutKind.Sequential, Size = 146)]
         private struct TitlePacket
         {
             [MarshalAs(UnmanagedType.U4)]

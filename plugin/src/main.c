@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "main.h"
-#include "log.h"
 
 int module_get_offset(SceUID pid, SceUID modid, int segidx, size_t offset, uintptr_t *addr);
 
