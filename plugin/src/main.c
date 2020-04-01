@@ -87,6 +87,13 @@ static int get_fg_app(char *out_titleid, char *out_title) {
         const char *titleid = (const char *)(APP_LIST_GET_TITLEID(pcurrent));
         const char *bubbleid = (const char *)(APP_LIST_GET_BUBBLEID(pcurrent));
 
+        // Filter out bg stuff
+        if (!strncmp(titleid, "NPXS", 4) &&
+                (!strncmp(&titleid[4], "10079", 5) ||     // Daily Checker BG
+                 !strncmp(&titleid[4], "10063", 5))) { // MsgMW
+            continue;
+        }
+
         // PspEmu launched through Adrenaline
         if (is_pspemu && !strncmp(bubbleid, "PSPEMUCFW", 9)) {
             SceAdrenaline adrenaline;
