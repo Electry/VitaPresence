@@ -83,17 +83,9 @@ static int get_fg_app(char *out_titleid, char *out_title) {
         if (state != APP_RUNNING)
             continue;
 
-        bool is_game = ksceSblACMgrIsGameProgram(pid);
         bool is_pspemu = ksceSblACMgrIsPspEmu(pid);
-        if (!is_game && !is_pspemu)
-            continue;
-
         const char *titleid = (const char *)(APP_LIST_GET_TITLEID(pcurrent));
         const char *bubbleid = (const char *)(APP_LIST_GET_BUBBLEID(pcurrent));
-
-        // Filter out homebrew
-        if (is_game && !is_pspemu && strncmp(titleid, "PCS", 3))
-            continue;
 
         // PspEmu launched through Adrenaline
         if (is_pspemu && !strncmp(bubbleid, "PSPEMUCFW", 9)) {
@@ -125,9 +117,9 @@ static int get_fg_app(char *out_titleid, char *out_title) {
                 memcpy(g_sfo_cache_title, out_title, 128);
             }
         }
-        // PSVita game
-        else if (is_game) {
-            snprintf(out_titleid, 10, "%s", bubbleid);
+        // PSVita game/app
+        else {
+            snprintf(out_titleid, 10, "%s", titleid);
             snprintf(out_title, 128, "%s", (const char *)(APP_LIST_GET_TITLE(pcurrent)));
         }
 
