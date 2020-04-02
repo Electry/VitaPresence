@@ -215,20 +215,19 @@ namespace VitaPresence_GUI
                     bool success = result.AsyncWaitHandle.WaitOne(2000, true);
                     if (!success)
                     {
-                        UpdateStatus("Could not connect to PS Vita! Retrying...", Color.DarkRed);
+                        SetUserInfoConnecting();
                         client.Close();
                         if (rpc != null && !rpc.IsDisposed) rpc.ClearPresence();
                     }
                     else
                     {
                         timer.Enabled = false;
-
                         DataListenOne();
                         client.EndConnect(result);
                         client.Close();
-
-                        Thread.Sleep(updateInterval * 1000); // wait before another connect
                     }
+
+                    Thread.Sleep(updateInterval * 1000); // wait before another connect
                 }
                 catch (ArgumentNullException)
                 {
