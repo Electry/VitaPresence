@@ -6,6 +6,8 @@ Inspired by [SwitchPresence](https://github.com/Sun-Research-University/SwitchPr
 
 ![vitapresence](https://user-images.githubusercontent.com/12598379/78289782-fc45eb80-7522-11ea-8d5c-1deb49b1cb9c.png)
 
+Works with PSVita & Adrenaline (including custom bubbles) games/apps
+
 ## Disclaimer
 The client app (on Windows PC) must be running in the background, and the PC must be on the same network as your Vita.
 
