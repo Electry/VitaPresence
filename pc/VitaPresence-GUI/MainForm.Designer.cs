@@ -53,10 +53,9 @@
             // 
             // connectButton
             // 
-            this.connectButton.Location = new System.Drawing.Point(132, 333);
-            this.connectButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.connectButton.Location = new System.Drawing.Point(88, 216);
             this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(112, 35);
+            this.connectButton.Size = new System.Drawing.Size(75, 23);
             this.connectButton.TabIndex = 13;
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
@@ -64,22 +63,20 @@
             // 
             // clientBox
             // 
-            this.clientBox.Location = new System.Drawing.Point(117, 112);
-            this.clientBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.clientBox.MaxLength = 18;
+            this.clientBox.Location = new System.Drawing.Point(78, 73);
+            this.clientBox.MaxLength = 25;
             this.clientBox.Name = "clientBox";
-            this.clientBox.Size = new System.Drawing.Size(148, 26);
+            this.clientBox.Size = new System.Drawing.Size(100, 20);
             this.clientBox.TabIndex = 3;
             this.clientBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(117, 28);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.MinimumSize = new System.Drawing.Size(150, 0);
+            this.label1.Location = new System.Drawing.Point(78, 18);
+            this.label1.MinimumSize = new System.Drawing.Size(100, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(150, 20);
+            this.label1.Size = new System.Drawing.Size(100, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "IP or MAC Address";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -87,11 +84,10 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(117, 89);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabel1.MinimumSize = new System.Drawing.Size(150, 0);
+            this.linkLabel1.Location = new System.Drawing.Point(78, 58);
+            this.linkLabel1.MinimumSize = new System.Drawing.Size(100, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(150, 20);
+            this.linkLabel1.Size = new System.Drawing.Size(100, 13);
             this.linkLabel1.TabIndex = 16;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Client ID";
@@ -104,10 +100,9 @@
             this.checkTime.AutoSize = true;
             this.checkTime.Checked = true;
             this.checkTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkTime.Location = new System.Drawing.Point(60, 428);
-            this.checkTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkTime.Location = new System.Drawing.Point(40, 278);
             this.checkTime.Name = "checkTime";
-            this.checkTime.Size = new System.Drawing.Size(170, 24);
+            this.checkTime.Size = new System.Drawing.Size(117, 17);
             this.checkTime.TabIndex = 14;
             this.checkTime.Text = "Show Time Lapsed";
             this.checkTime.UseVisualStyleBackColor = true;
@@ -116,22 +111,20 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(117, 209);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.MinimumSize = new System.Drawing.Size(150, 0);
+            this.label2.Location = new System.Drawing.Point(78, 136);
+            this.label2.MinimumSize = new System.Drawing.Size(100, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(150, 20);
+            this.label2.Size = new System.Drawing.Size(100, 13);
             this.label2.TabIndex = 10;
             this.label2.Text = "State Text";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // stateBox
             // 
-            this.stateBox.Location = new System.Drawing.Point(117, 234);
-            this.stateBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.stateBox.Location = new System.Drawing.Point(78, 152);
             this.stateBox.MaxLength = 128;
             this.stateBox.Name = "stateBox";
-            this.stateBox.Size = new System.Drawing.Size(148, 26);
+            this.stateBox.Size = new System.Drawing.Size(100, 20);
             this.stateBox.TabIndex = 11;
             this.stateBox.TextChanged += new System.EventHandler(this.StateBox_TextChanged);
             // 
@@ -139,10 +132,9 @@
             // 
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusLabel.ForeColor = System.Drawing.Color.Red;
-            this.statusLabel.Location = new System.Drawing.Point(42, 265);
-            this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.statusLabel.Location = new System.Drawing.Point(28, 172);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(300, 62);
+            this.statusLabel.Size = new System.Drawing.Size(200, 40);
             this.statusLabel.TabIndex = 12;
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -161,29 +153,28 @@
             this.connectToolStripMenuItem,
             this.trayExitMenuItem});
             this.trayContextMenu.Name = "trayContextMenu";
-            this.trayContextMenu.Size = new System.Drawing.Size(150, 68);
+            this.trayContextMenu.Size = new System.Drawing.Size(120, 48);
             // 
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(149, 32);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
             // trayExitMenuItem
             // 
             this.trayExitMenuItem.Name = "trayExitMenuItem";
-            this.trayExitMenuItem.Size = new System.Drawing.Size(149, 32);
+            this.trayExitMenuItem.Size = new System.Drawing.Size(119, 22);
             this.trayExitMenuItem.Text = "Exit";
             this.trayExitMenuItem.Click += new System.EventHandler(this.TrayExitMenuItem_Click);
             // 
             // checkTray
             // 
             this.checkTray.AutoSize = true;
-            this.checkTray.Location = new System.Drawing.Point(60, 463);
-            this.checkTray.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkTray.Location = new System.Drawing.Point(40, 301);
             this.checkTray.Name = "checkTray";
-            this.checkTray.Size = new System.Drawing.Size(148, 24);
+            this.checkTray.Size = new System.Drawing.Size(102, 17);
             this.checkTray.TabIndex = 15;
             this.checkTray.Text = "Minimize to Tray";
             this.checkTray.UseVisualStyleBackColor = true;
@@ -193,10 +184,9 @@
             this.checkMainMenu.AutoSize = true;
             this.checkMainMenu.Checked = true;
             this.checkMainMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkMainMenu.Location = new System.Drawing.Point(60, 392);
-            this.checkMainMenu.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkMainMenu.Location = new System.Drawing.Point(40, 255);
             this.checkMainMenu.Name = "checkMainMenu";
-            this.checkMainMenu.Size = new System.Drawing.Size(221, 24);
+            this.checkMainMenu.Size = new System.Drawing.Size(150, 17);
             this.checkMainMenu.TabIndex = 18;
             this.checkMainMenu.Text = "Display LiveArea as status";
             this.checkMainMenu.UseVisualStyleBackColor = true;
@@ -204,20 +194,18 @@
             // 
             // addressBox
             // 
-            this.addressBox.Location = new System.Drawing.Point(117, 54);
-            this.addressBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.addressBox.Location = new System.Drawing.Point(78, 35);
             this.addressBox.Name = "addressBox";
-            this.addressBox.Size = new System.Drawing.Size(148, 26);
+            this.addressBox.Size = new System.Drawing.Size(100, 20);
             this.addressBox.TabIndex = 1;
             this.addressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // UseMacDefault
             // 
             this.UseMacDefault.AutoSize = true;
-            this.UseMacDefault.Location = new System.Drawing.Point(60, 500);
-            this.UseMacDefault.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.UseMacDefault.Location = new System.Drawing.Point(40, 325);
             this.UseMacDefault.Name = "UseMacDefault";
-            this.UseMacDefault.Size = new System.Drawing.Size(261, 24);
+            this.UseMacDefault.Size = new System.Drawing.Size(178, 17);
             this.UseMacDefault.TabIndex = 19;
             this.UseMacDefault.Text = "Automatically convert IP to MAC";
             this.UseMacDefault.UseVisualStyleBackColor = true;
@@ -226,31 +214,29 @@
             // updateIntervallabel
             // 
             this.updateIntervallabel.AutoSize = true;
-            this.updateIntervallabel.Location = new System.Drawing.Point(117, 149);
-            this.updateIntervallabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.updateIntervallabel.MinimumSize = new System.Drawing.Size(150, 0);
+            this.updateIntervallabel.Location = new System.Drawing.Point(78, 97);
+            this.updateIntervallabel.MinimumSize = new System.Drawing.Size(100, 0);
             this.updateIntervallabel.Name = "updateIntervallabel";
-            this.updateIntervallabel.Size = new System.Drawing.Size(150, 20);
+            this.updateIntervallabel.Size = new System.Drawing.Size(100, 13);
             this.updateIntervallabel.TabIndex = 20;
             this.updateIntervallabel.Text = "Update Interval (s)";
             this.updateIntervallabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // updateIntervalBox
             // 
-            this.updateIntervalBox.Location = new System.Drawing.Point(117, 174);
-            this.updateIntervalBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.updateIntervalBox.Location = new System.Drawing.Point(78, 113);
             this.updateIntervalBox.MaxLength = 128;
             this.updateIntervalBox.Name = "updateIntervalBox";
-            this.updateIntervalBox.Size = new System.Drawing.Size(148, 26);
+            this.updateIntervalBox.Size = new System.Drawing.Size(100, 20);
             this.updateIntervalBox.TabIndex = 21;
             this.updateIntervalBox.Text = "10";
             this.updateIntervalBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 550);
+            this.ClientSize = new System.Drawing.Size(256, 358);
             this.Controls.Add(this.updateIntervallabel);
             this.Controls.Add(this.updateIntervalBox);
             this.Controls.Add(this.UseMacDefault);
@@ -267,7 +253,6 @@
             this.Controls.Add(this.addressBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "VitaPresence";
